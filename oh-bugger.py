@@ -1,14 +1,15 @@
 import os
 import shutil
 
-# Define the directory path
+# Define the directory path.
 directory_path = "S:\\"
 
 usage = shutil.disk_usage(directory_path)
 
-# Create the directory if it doesn't exist
+# Create the directory if it doesn't exist.
 os.makedirs(directory_path, exist_ok=True)
 
+# Content of text file.
 BUGGER = r"""
         ,
        /|
@@ -42,6 +43,7 @@ snd|  ,     |  /\ \ \__    |       \_
                                         ==( |          |
                                              (o)====(o)
 """
+# Create text files containing the content until we hit an amount of free space left.
 i = 0
 while (usage.free / 1024) > 2:
     file_name = f"oh-bugger_{i}.txt"
@@ -51,6 +53,7 @@ while (usage.free / 1024) > 2:
         usage = shutil.disk_usage(directory_path)
     i += 1
 
+# Print space details of drive.
 print(f"Drive: {directory_path}")
 print(f"Total: {usage.total / 1024:.2f} KB")
 print(f"Used: {usage.used / 1024:.2f} KB")
