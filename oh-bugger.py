@@ -2,9 +2,6 @@ import os
 import shutil
 import asyncio
 
-# Define the directory path.
-directory_path = "S:\\"
-
 # Asynchronous file creation function
 async def create_files(directory_path):
 
@@ -58,7 +55,7 @@ snd|  ,     |  /\ \ \__    |       \_
             file_name = f"oh-bugger_{i}.txt"
             file_path = os.path.join(directory_path, file_name)
             if not os.path.exists(file_path):
-                make_file(file_path, BUGGER)
+                await make_file(file_path, BUGGER)
                 usage = shutil.disk_usage(directory_path)
             i += 1
     except KeyboardInterrupt as k:
@@ -74,6 +71,8 @@ snd|  ,     |  /\ \ \__    |       \_
 
 # Main asynchronous function to run the code
 async def main():
+    # Define the directory path.
+    directory_path = "S:\\"
     await create_files(directory_path)
 
 # Run the event loop
