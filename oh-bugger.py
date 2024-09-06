@@ -1,16 +1,24 @@
 import os
 import shutil
+import asyncio
 
 # Define the directory path.
 directory_path = "S:\\"
 
-usage = shutil.disk_usage(directory_path)
+# Asynchronous file creation function
+async def create_files(directory_path):
 
-# Create the directory if it doesn't exist.
-os.makedirs(directory_path, exist_ok=True)
+    async def make_file(path, content):
+        with open(path, "w") as file:
+            file.write(content)
 
-# Content of text file.
-BUGGER = r"""
+    usage = shutil.disk_usage(directory_path)
+
+    # Create the directory if it doesn't exist.
+    os.makedirs(directory_path, exist_ok=True)
+
+    # Content of text file.
+    BUGGER = r"""
         ,
        /|
       / |
@@ -43,24 +51,30 @@ snd|  ,     |  /\ \ \__    |       \_
                                         ==( |          |
                                              (o)====(o)
 """
-# Create text files containing the content until we hit an amount of free space left.
-i = 0
-try:
-    while (usage.free / 1024) > 2:
-        file_name = f"oh-bugger_{i}.txt"
-        file_path = os.path.join(directory_path, file_name)
-        if not os.path.exists(file_path):
-            with open(file_path, "w") as file:
-                file.write(BUGGER)
+    # Create text files containing the content until we hit an amount of free space left.
+    i = 0
+    try:
+        while (usage.free / 1024) > 2:
+            file_name = f"oh-bugger_{i}.txt"
+            file_path = os.path.join(directory_path, file_name)
+            if not os.path.exists(file_path):
+                make_file(file_path, BUGGER)
                 usage = shutil.disk_usage(directory_path)
-        i += 1
-except KeyboardInterrupt as k:
-    print(f"Okay fine, here are the directory results:")
-except Exception as e:
-    print(f"An error occurred: {e}")
+            i += 1
+    except KeyboardInterrupt as k:
+        print(f"Okay fine, here are the directory results:")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
-# Print space details of drive.
-print(f"Drive: {directory_path}")
-print(f"Total: {usage.total / 1024:.2f} KB")
-print(f"Used: {usage.used / 1024:.2f} KB")
-print(f"Free: {usage.free / 1024:.2f} KB")
+    # Print space details of drive.
+    print(f"Drive: {directory_path}")
+    print(f"Total: {usage.total / 1024:.2f} KB")
+    print(f"Used: {usage.used / 1024:.2f} KB")
+    print(f"Free: {usage.free / 1024:.2f} KB")
+
+# Main asynchronous function to run the code
+async def main():
+    await create_files(directory_path)
+
+# Run the event loop
+asyncio.run(main())
